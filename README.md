@@ -10,7 +10,7 @@ Usage example
 -------------
 
 ```
-import { log, logger } from "https://deno.land/x/notranspile_logger@1.0.0/mod.ts"
+import { log, logger } from "https://deno.land/x/notranspile_logger@1.1.0/mod.ts"
 
 // standard logging setup
 await log.setup({

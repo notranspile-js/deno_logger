@@ -23,8 +23,10 @@ Deno.test("logger test", async () => {
 
   await log.setup({
     handlers: {
-      file: new log.handlers.FileHandler("DEBUG", {
+      file: new log.handlers.RotatingFileHandler("DEBUG", {
         filename: file,
+        maxBackupCount: 1,
+        maxBytes: 1024 * 1024
       }),
     },
 

@@ -44,13 +44,22 @@ function logAndFlush(level: number, msg: string) {
 
   // flush
   for (const handler of logger.handlers) {
-    // todo: inheritance chain
-    const proto = Object.getPrototypeOf(handler);
-    const props = Object.getOwnPropertyNames(proto);
-    if (props.includes("flush")) {
-      const rec = handler as unknown as Record<string, () => void>;
+
+    let hasFlush = false;
+    // https://stackoverflow.com/a/31055217
+    let proto = handler;
+    do {
+      const props = Object.getOwnPropertyNames(proto);
+      if (props.includes("flush")) {
+        hasFlush = true;
+        break;
+      }
+    } while (null != (proto = Object.getPrototypeOf(proto)));
+
+    if (hasFlush) {
+      const obj = handler as unknown as Record<string, () => void>;
       try {
-        rec.flush();
+        obj.flush();
       } catch(e) {
         console.error(e.stack);
         logger.critical(e.stack);
